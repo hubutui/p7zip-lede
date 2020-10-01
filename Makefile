@@ -26,7 +26,7 @@ define Package/p7zip
   CATEGORY:=Utilities
   TITLE:=p7zip archiver
   URL:=http://http://www.7-zip.org
-  DEPENDS:=+libstdcpp
+  DEPENDS:=+libstdcpp +libpthread
 endef
 
 MAKE_FLAGS += 7z
