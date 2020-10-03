@@ -1,15 +1,15 @@
 # Introduction
 Makefile to create package p7zip for [LEDE](https://lede-project.org)/[OpenWrt](https://openwrt.org/).
-Only `7z` is available, if you need `7za` or `7zr`, you might freedly modify the `MAKE_FLAGS` and the install section in file `Makefile`, don't foget to create`files/7za` or `files/7zr` using `files/7z` as template.
+Only `7z` `7za` and `7zr` is available.
 
 # Usage
 ```bash
 cd lede-sdk/
-git clone https://github.com/hubutui/p7zip-lede.git package/p7zip
+git clone https://github.com/swordv2/p7zip-lede.git package/p7zip
 make menuconfig
 ```
 
-Check Ultilities->p7zip
+Check Ultilities->Compression->p7zip-7z/7za/7zr
 
 ```bash
 make -j 1 V=s
