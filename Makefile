@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=p7zip
 PKG_VERSION:=16.02
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 http://sourceforge.net/projects/p7zip/files/p7zip/$(PKG_VERSION)/p7zip_$(PKG_VERSION)_src_all.tar.bz2/download
 
@@ -21,23 +21,54 @@ PKG_MD5SUM:=a0128d661cfe7cc8c121e73519c54fbf
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/p7zip
-  SECTION:=utils
-  CATEGORY:=Utilities
-  TITLE:=p7zip archiver
-  URL:=http://http://www.7-zip.org
-  DEPENDS:=+libstdcpp +libpthread
+MAKE_FLAGS += 7z 7za 7zr
+
+define Package/p7zip/Default
+	SECTION:=utils
+	CATEGORY:=Utilities
+	SUBMENU:=Compression
+	TITLE:=p7zip archiver
+	URL:=http://http://www.7-zip.org
+	DEPENDS:=+libstdcpp +libpthread
 endef
 
-MAKE_FLAGS += 7z
+define Package/p7zip-7z
+	$(call Package/p7zip/Default)
+	TITLE += (uses plugins to handle archives)
+endef
 
-define Package/p7zip/install
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) -r $(PKG_BUILD_DIR)/bin/ $(1)/usr/lib/p7zip
+define Package/p7zip-7z/install
+	$(INSTALL_DIR) $(1)/usr/lib/p7zip/Codecs
+	$(CP) $(PKG_BUILD_DIR)/bin/7z.so $(1)/usr/lib/p7zip
+	$(CP) $(PKG_BUILD_DIR)/bin/Codecs/Rar.so $(1)/usr/lib/p7zip/Codecs
 
 	$(INSTALL_DIR) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/7z $(1)/usr/lib/p7zip
 	$(INSTALL_BIN) ./files/7z $(1)/usr/bin
 endef
 
-$(eval $(call BuildPackage,p7zip))
+define Package/p7zip-7za
+	$(call Package/p7zip/Default)
+	TITLE += (fewer archive formats than p7zip-7z)
+endef
 
+define Package/p7zip-7za/install
+	$(INSTALL_DIR) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/7za $(1)/usr/bin
+	$(LN) 7za $(1)/usr/bin/7z
+endef
+
+define Package/p7zip-7zr
+	$(call Package/p7zip/Default)
+	TITLE += (only 7z archives)
+endef
+
+define Package/p7zip-7zr/install
+	$(INSTALL_DIR) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/7zr $(1)/usr/bin
+	$(LN) 7zr $(1)/usr/bin/7z
+endef
+
+$(eval $(call BuildPackage,p7zip-7z))
+$(eval $(call BuildPackage,p7zip-7za))
+$(eval $(call BuildPackage,p7zip-7zr))
