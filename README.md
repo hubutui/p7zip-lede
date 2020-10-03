@@ -9,7 +9,7 @@ git clone https://github.com/swordv2/p7zip-lede.git package/p7zip
 make menuconfig
 ```
 
-Check Ultilities->Compression->p7zip-7z/7za/7zr
+Check `Ultilities`->`Compression`->`p7zip-7z`/`p7zip-7za`/`p7zip-7zr`
 
 ```bash
 make -j 1 V=s
